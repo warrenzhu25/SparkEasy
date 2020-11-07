@@ -2,32 +2,41 @@ package com.warren.backend.data.entity;
 
 import com.warren.backend.data.RunState;
 import lombok.Data;
-import org.hibernate.annotations.BatchSize;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.*;
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import java.util.Date;
 
 @Data
 @Entity
+@NoArgsConstructor
 public class AppRun extends AbstractEntity {
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-	@OrderColumn
-	@JoinColumn
-	@BatchSize(size = 1000)
-	@NotEmpty
-	@Valid
+	private String appId;
+	private Cluster cluster;
+	private Integer livyId;
+
+	@ManyToOne
 	private SparkApp sparkApp;
+
+	private String name;
+	@Column(length = 100000)
+	private String livyBody;
 
 	private RunState state;
 
-	public AppRun(User createdBy, SparkApp app) {
-		this.state = RunState.NEW;
-		this.sparkApp = app;
-	}
+	@CreatedDate
+	@Column(updatable = false)
+	private Date createdDate;
 
-	public void changeState(User user, RunState state) {
+	@LastModifiedDate
+	private Date lastModifiedDate;
 
-	}
+	@CreatedBy
+	private User createdBy;
 }

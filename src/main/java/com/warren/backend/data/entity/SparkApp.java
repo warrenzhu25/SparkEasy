@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -15,7 +16,6 @@ import java.util.Objects;
 @Entity
 public class SparkApp extends AbstractEntity {
 
-	@NotBlank(message = "{bakery.name.required}")
 	@Size(max = 255)
 	@Column(unique = true)
 	private String name;

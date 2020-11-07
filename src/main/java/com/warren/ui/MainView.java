@@ -22,6 +22,7 @@ import com.warren.ui.views.admin.products.ProductsView;
 import com.warren.ui.views.admin.users.UsersView;
 import com.warren.ui.views.app.AppsView;
 import com.warren.ui.views.dashboard.DashboardView;
+import com.warren.ui.views.run.AppRunsView;
 import com.warren.ui.views.storefront.StorefrontView;
 
 import java.util.ArrayList;
@@ -106,6 +107,9 @@ public class MainView extends AppLayout {
 		}
 		if (SecurityUtils.isAccessGranted(AppsView.class)) {
 			tabs.add(createTab(VaadinIcon.LAPTOP, TITLE_APPS, AppsView.class));
+		}
+		if (SecurityUtils.isAccessGranted(AppRunsView.class)) {
+			tabs.add(createTab(VaadinIcon.CLOCK, TITLE_RUNS, AppRunsView.class));
 		}
 		final String contextPath = VaadinServlet.getCurrent().getServletContext().getContextPath();
 		final Tab logoutTab = createTab(createLogoutLink(contextPath));
