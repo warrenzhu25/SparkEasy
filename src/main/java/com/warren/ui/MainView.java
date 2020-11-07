@@ -1,12 +1,5 @@
 package com.warren.ui;
 
-import static com.warren.ui.utils.BakeryConst.TITLE_DASHBOARD;
-import static com.warren.ui.utils.BakeryConst.TITLE_LOGOUT;
-import static com.warren.ui.utils.BakeryConst.TITLE_PRODUCTS;
-import static com.warren.ui.utils.BakeryConst.TITLE_STOREFRONT;
-import static com.warren.ui.utils.BakeryConst.TITLE_USERS;
-import static com.warren.ui.utils.BakeryConst.VIEWPORT;
-
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -27,12 +20,15 @@ import com.warren.ui.components.OfflineBanner;
 import com.warren.ui.views.HasConfirmation;
 import com.warren.ui.views.admin.products.ProductsView;
 import com.warren.ui.views.admin.users.UsersView;
+import com.warren.ui.views.app.AppsView;
 import com.warren.ui.views.dashboard.DashboardView;
 import com.warren.ui.views.storefront.StorefrontView;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.warren.ui.utils.BakeryConst.*;
 
 @Viewport(VIEWPORT)
 @PWA(name = "Bakery App Starter", shortName = "SparkEasy",
@@ -107,6 +103,9 @@ public class MainView extends AppLayout {
 		}
 		if (SecurityUtils.isAccessGranted(ProductsView.class)) {
 			tabs.add(createTab(VaadinIcon.CALENDAR, TITLE_PRODUCTS, ProductsView.class));
+		}
+		if (SecurityUtils.isAccessGranted(AppsView.class)) {
+			tabs.add(createTab(VaadinIcon.LAPTOP, TITLE_APPS, AppsView.class));
 		}
 		final String contextPath = VaadinServlet.getCurrent().getServletContext().getContextPath();
 		final Tab logoutTab = createTab(createLogoutLink(contextPath));
