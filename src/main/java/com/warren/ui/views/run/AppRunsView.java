@@ -44,10 +44,10 @@ public class AppRunsView extends AbstractBakeryCrudView<AppRun> {
 
     @Override
     public void setupGrid(Grid<AppRun> grid) {
-        grid.addColumn(r -> r.getSparkApp().getName()).setHeader("Name").setWidth("200px").setFlexGrow(5);
-        grid.addColumn(r -> r.getSparkApp().getLivyBody()).setHeader("Request body").setFlexGrow(5);
-        grid.addColumn(AppRun::getCluster).setHeader("Cluster").setFlexGrow(5);
-//        grid.addColumns("name", "cluster", "state", "appId", "livyId", "createdDate", "lastModifiedDate");
+        grid.addColumn(r -> r.getSparkApp().getName()).setHeader("Name");
+        grid.addColumn(r -> r.getSparkApp().getLivyBody()).setHeader("Request body");
+        grid.addColumn(AppRun::getCluster).setHeader("Cluster");
+        grid.getColumns().forEach(c -> c.setAutoWidth(true));
     }
 
     @Override
