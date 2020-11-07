@@ -12,23 +12,14 @@ import java.util.function.Supplier;
 
 import javax.annotation.PostConstruct;
 
+import com.warren.backend.data.entity.*;
+import com.warren.backend.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.warren.backend.data.OrderState;
 import com.warren.backend.data.Role;
-import com.warren.backend.data.entity.Customer;
-import com.warren.backend.data.entity.HistoryItem;
-import com.warren.backend.data.entity.Order;
-import com.warren.backend.data.entity.OrderItem;
-import com.warren.backend.data.entity.PickupLocation;
-import com.warren.backend.data.entity.Product;
-import com.warren.backend.data.entity.User;
-import com.warren.backend.repositories.OrderRepository;
-import com.warren.backend.repositories.PickupLocationRepository;
-import com.warren.backend.repositories.ProductRepository;
-import com.warren.backend.repositories.UserRepository;
 
 @SpringComponent
 public class DataGenerator implements HasLogger {
@@ -52,6 +43,8 @@ public class DataGenerator implements HasLogger {
 	private ProductRepository productRepository;
 	private PickupLocationRepository pickupLocationRepository;
 	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private SparkAppRepository appRepository;
 
 	@Autowired
 	public DataGenerator(OrderRepository orderRepository, UserRepository userRepository,
@@ -91,6 +84,9 @@ public class DataGenerator implements HasLogger {
 
 		getLogger().info("... generating orders");
 		createOrders(orderRepository, productSupplier, pickupLocationSupplier, barista, baker);
+
+		getLogger().info("... generating spark apps");
+		createApps();
 
 		getLogger().info("Generated demo data");
 	}
@@ -357,5 +353,12 @@ public class DataGenerator implements HasLogger {
 		user.setRole(role);
 		user.setLocked(locked);
 		return user;
+	}
+
+	private void createApps() {
+		SparkApp app = new SparkApp();
+		app.setName("SparkPi");
+		app.setLivyBody("{ \"conf\": { \"spark.yarn.archive\": \"hdfs://MTPrime-CO4-0/user/zhonzh/spark-3.0.1-mt-jars.zip\" }, \"proxyUser\": \"zhonzh\", \"file\": \"hdfs://MTPrime-CO4-0/user/zhonzh/spark-examples_2.11-2.4.4.jar\", \"className\": \"org.apache.spark.examples.SparkPi\" }");
+		appRepository.save(app);
 	}
 }
