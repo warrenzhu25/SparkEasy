@@ -7,10 +7,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface AppRunRepository extends JpaRepository<AppRun, Long> {
     Page<AppRun> findBy(Pageable pageable);
 
     Page<AppRun> findByNameLikeIgnoreCase(String name, Pageable page);
 
     int countByNameLikeIgnoreCase(String name);
+
+    List<AppRun> findByStateNotIn(String[] states);
 }

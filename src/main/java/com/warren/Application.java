@@ -13,6 +13,7 @@ import com.warren.backend.data.entity.User;
 import com.warren.backend.repositories.UserRepository;
 import com.warren.backend.service.UserService;
 import com.warren.ui.MainView;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Spring boot web application initializer.
@@ -21,6 +22,7 @@ import com.warren.ui.MainView;
 		UserService.class }, exclude = ErrorMvcAutoConfiguration.class)
 @EnableJpaRepositories(basePackageClasses = { UserRepository.class })
 @EntityScan(basePackageClasses = { User.class })
+@EnableScheduling
 public class Application extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {

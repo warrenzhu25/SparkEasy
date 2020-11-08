@@ -8,6 +8,5 @@ public class BatchResponse {
     private String name;
     private String state;
     private String appId;
-    private String[] log;
     private String[] exceptions;
 }

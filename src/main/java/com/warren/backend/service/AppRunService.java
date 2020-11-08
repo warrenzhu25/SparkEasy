@@ -1,5 +1,6 @@
 package com.warren.backend.service;
 
+import com.warren.backend.data.RunState;
 import com.warren.backend.data.entity.AppRun;
 import com.warren.backend.data.entity.User;
 import com.warren.backend.data.livy.BatchResponse;
@@ -10,12 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.scheduler.Schedulers;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -101,7 +104,28 @@ public class AppRunService implements FilterableCrudService<AppRun> {
 			appRun.setAppId(response.getAppId());
 		}
 
-		log.info("Spark app submitted: {}", response);
+		log.info("Spark app updated: {}", response);
 		appRunRepository.save(appRun);
+	}
+
+	@Scheduled(fixedRate = 5000)
+	public void updateAppRuns() {
+		appRunRepository
+				.findByStateNotIn(RunState.getFinishedState())
+				.forEach(this::updateAppRun);
+	}
+
+	private void updateAppRun(AppRun appRun) {
+		String livyUrl = appRun.getCluster().getUrl();
+		webClients.putIfAbsent(livyUrl, WebClient.builder().baseUrl(livyUrl).build());
+		WebClient webClient = webClients.get(livyUrl);
+
+		webClient.get()
+				.uri("/batches/{id}", appRun.getLivyId())
+				.accept(MediaType.APPLICATION_JSON)
+				.retrieve()
+				.bodyToMono(BatchResponse.class)
+				.subscribeOn(Schedulers.single())
+				.subscribe(c -> onAppSubmitted(appRun, c));
 	}
 }
