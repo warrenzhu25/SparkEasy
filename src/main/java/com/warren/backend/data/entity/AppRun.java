@@ -19,7 +19,7 @@ public class AppRun extends AbstractEntity {
 
 	private String appId;
 	private Cluster cluster;
-	private Integer livyId;
+	private Long livyId;
 
 	@ManyToOne
 	private SparkApp sparkApp;
@@ -28,7 +28,7 @@ public class AppRun extends AbstractEntity {
 	@Column(length = 100000)
 	private String livyBody;
 
-	private RunState state;
+	private String state;
 
 	@CreatedDate
 	@Column(updatable = false)

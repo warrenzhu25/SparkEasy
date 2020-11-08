@@ -45,8 +45,11 @@ public class AppRunsView extends AbstractBakeryCrudView<AppRun> {
     @Override
     public void setupGrid(Grid<AppRun> grid) {
         grid.addColumn(r -> r.getSparkApp().getName()).setHeader("Name");
-        grid.addColumn(r -> r.getSparkApp().getLivyBody()).setHeader("Request body");
         grid.addColumn(AppRun::getCluster).setHeader("Cluster");
+        grid.addColumn(AppRun::getLivyId).setHeader("Livy id");
+        grid.addColumn(AppRun::getAppId).setHeader("Yarn app id");
+        grid.addColumn(AppRun::getState).setHeader("State");
+        grid.addColumn(r -> r.getSparkApp().getLivyBody()).setHeader("Request body");
         grid.getColumns().forEach(c -> c.setAutoWidth(true));
     }
 
@@ -56,9 +59,6 @@ public class AppRunsView extends AbstractBakeryCrudView<AppRun> {
     }
 
     private static BinderCrudEditor<AppRun> createForm(SparkAppService sparkAppService) {
-        EmailField email = new EmailField("Email (login)");
-        email.getElement().setAttribute("colspan", "2");
-
         ComboBox<SparkApp> sparkApp = new ComboBox<>();
         sparkApp.setDataProvider(new CrudEntityDataProvider<>(sparkAppService));
         sparkApp.setItemLabelGenerator(SparkApp::getName);
@@ -66,8 +66,10 @@ public class AppRunsView extends AbstractBakeryCrudView<AppRun> {
         ComboBox<Cluster> cluster = new ComboBox<>();
         cluster.getElement().setAttribute("colspan", "2");
         cluster.setLabel("Cluster");
+        cluster.setItems(Cluster.values());
+        cluster.setValue(Cluster.Prime_CO4);
 
-        FormLayout form = new FormLayout(email, sparkApp, cluster);
+        FormLayout form = new FormLayout(sparkApp, cluster);
 
         BeanValidationBinder<AppRun> binder = new BeanValidationBinder<>(AppRun.class);
 
