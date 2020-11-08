@@ -83,7 +83,7 @@ public class AppRunService implements FilterableCrudService<AppRun> {
 	}
 
 	private void submit(AppRun appRun) {
-		String livyUrl = appRun.getCluster().getUrl();
+		String livyUrl = appRun.getCluster().getLivyUrl();
 		webClients.putIfAbsent(livyUrl, WebClient.builder().baseUrl(livyUrl).build());
 		WebClient webClient = webClients.get(livyUrl);
 
@@ -116,7 +116,7 @@ public class AppRunService implements FilterableCrudService<AppRun> {
 	}
 
 	private void updateAppRun(AppRun appRun) {
-		String livyUrl = appRun.getCluster().getUrl();
+		String livyUrl = appRun.getCluster().getLivyUrl();
 		webClients.putIfAbsent(livyUrl, WebClient.builder().baseUrl(livyUrl).build());
 		WebClient webClient = webClients.get(livyUrl);
 

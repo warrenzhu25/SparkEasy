@@ -1,6 +1,5 @@
 package com.warren.backend.data.entity;
 
-import com.warren.backend.data.RunState;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedBy;
@@ -39,4 +38,8 @@ public class AppRun extends AbstractEntity {
 
 	@CreatedBy
 	private User createdBy;
+
+	public String getHistoryUrl() {
+		return cluster.getHistoryUrl() + appId;
+	}
 }
