@@ -4,26 +4,18 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
-import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabVariant;
 import com.vaadin.flow.component.tabs.Tabs;
+import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.server.PWA;
-import com.vaadin.flow.server.VaadinServlet;
-import com.warren.app.security.SecurityUtils;
-import com.warren.ui.components.OfflineBanner;
 import com.warren.ui.views.HasConfirmation;
-import com.warren.ui.views.admin.products.ProductsView;
-import com.warren.ui.views.admin.users.UsersView;
 import com.warren.ui.views.app.AppsView;
-import com.warren.ui.views.dashboard.DashboardView;
 import com.warren.ui.views.run.AppRunsView;
-import com.warren.ui.views.storefront.StorefrontView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +24,6 @@ import java.util.Optional;
 import static com.warren.ui.utils.BakeryConst.*;
 
 @Viewport(VIEWPORT)
-@PWA(name = "Bakery App Starter", shortName = "SparkEasy",
-		startPath = "login",
-		backgroundColor = "#227aef", themeColor = "#227aef",
-		offlinePath = "offline-page.html",
-		offlineResources = {"images/offline-login-banner.jpg"},
-		enableInstallPrompt = false)
 public class MainView extends AppLayout {
 
 	private final ConfirmDialog confirmDialog = new ConfirmDialog();
@@ -90,30 +76,16 @@ public class MainView extends AppLayout {
 	private static Tabs createMenuTabs() {
 		final Tabs tabs = new Tabs();
 		tabs.setOrientation(Tabs.Orientation.HORIZONTAL);
-		tabs.add(getAvailableTabs());
+		Tab[] availableTabs = getAvailableTabs();
+		tabs.add(availableTabs);
+		tabs.setSelectedTab(availableTabs[0]);
 		return tabs;
 	}
 
 	private static Tab[] getAvailableTabs() {
-		final List<Tab> tabs = new ArrayList<>(4);
-		tabs.add(createTab(VaadinIcon.EDIT, TITLE_STOREFRONT,
-						StorefrontView.class));
-		tabs.add(createTab(VaadinIcon.CLOCK,TITLE_DASHBOARD, DashboardView.class));
-		if (SecurityUtils.isAccessGranted(UsersView.class)) {
-			tabs.add(createTab(VaadinIcon.USER,TITLE_USERS, UsersView.class));
-		}
-		if (SecurityUtils.isAccessGranted(ProductsView.class)) {
-			tabs.add(createTab(VaadinIcon.CALENDAR, TITLE_PRODUCTS, ProductsView.class));
-		}
-		if (SecurityUtils.isAccessGranted(AppsView.class)) {
-			tabs.add(createTab(VaadinIcon.LAPTOP, TITLE_APPS, AppsView.class));
-		}
-		if (SecurityUtils.isAccessGranted(AppRunsView.class)) {
-			tabs.add(createTab(VaadinIcon.CLOCK, TITLE_RUNS, AppRunsView.class));
-		}
-		final String contextPath = VaadinServlet.getCurrent().getServletContext().getContextPath();
-		final Tab logoutTab = createTab(createLogoutLink(contextPath));
-		tabs.add(logoutTab);
+		final List<Tab> tabs = new ArrayList<>();
+		tabs.add(createTab(VaadinIcon.LAPTOP, TITLE_APPS, AppsView.class));
+		tabs.add(createTab(VaadinIcon.CLOCK, TITLE_RUNS, AppRunsView.class));
 		return tabs.toArray(new Tab[tabs.size()]);
 	}
 
@@ -126,12 +98,6 @@ public class MainView extends AppLayout {
 		tab.addThemeVariants(TabVariant.LUMO_ICON_ON_TOP);
 		tab.add(content);
 		return tab;
-	}
-
-	private static Anchor createLogoutLink(String contextPath) {
-		final Anchor a = populateLink(new Anchor(), VaadinIcon.ARROW_RIGHT, TITLE_LOGOUT);
-		a.setHref(contextPath + "/logout");
-		return a;
 	}
 
 	private static <T extends HasComponents> T populateLink(T a, VaadinIcon icon, String title) {

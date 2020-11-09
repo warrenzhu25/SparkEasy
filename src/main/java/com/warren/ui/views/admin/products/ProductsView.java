@@ -17,7 +17,6 @@ import com.warren.ui.crud.AbstractBakeryCrudView;
 import com.warren.ui.utils.BakeryConst;
 import com.warren.ui.utils.converters.CurrencyFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 
 import java.util.Currency;
 
@@ -25,7 +24,6 @@ import static com.warren.ui.utils.BakeryConst.PAGE_PRODUCTS;
 
 @Route(value = PAGE_PRODUCTS, layout = MainView.class)
 @PageTitle(BakeryConst.TITLE_PRODUCTS)
-@Secured(Role.ADMIN)
 public class ProductsView extends AbstractBakeryCrudView<Product> {
 
 	private CurrencyFormatter currencyFormatter = new CurrencyFormatter();

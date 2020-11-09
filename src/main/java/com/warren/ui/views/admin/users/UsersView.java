@@ -3,8 +3,6 @@ package com.warren.ui.views.admin.users;
 import static com.warren.ui.utils.BakeryConst.PAGE_USERS;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.crud.BinderCrudEditor;
@@ -28,12 +26,11 @@ import com.warren.ui.utils.BakeryConst;
 
 @Route(value = PAGE_USERS, layout = MainView.class)
 @PageTitle(BakeryConst.TITLE_USERS)
-@Secured(Role.ADMIN)
 public class UsersView extends AbstractBakeryCrudView<User> {
 
 	@Autowired
-	public UsersView(UserService service, CurrentUser currentUser, PasswordEncoder passwordEncoder) {
-		super(User.class, service, new Grid<>(), createForm(passwordEncoder), currentUser);
+	public UsersView(UserService service, CurrentUser currentUser) {
+		super(User.class, service, new Grid<>(), createForm(), currentUser);
 	}
 
 	@Override
@@ -48,7 +45,7 @@ public class UsersView extends AbstractBakeryCrudView<User> {
 		return PAGE_USERS;
 	}
 
-	private static BinderCrudEditor<User> createForm(PasswordEncoder passwordEncoder) {
+	private static BinderCrudEditor<User> createForm() {
 		EmailField email = new EmailField("Email (login)");
 		email.getElement().setAttribute("colspan", "2");
 		TextField first = new TextField("First name");
@@ -71,15 +68,6 @@ public class UsersView extends AbstractBakeryCrudView<User> {
 		binder.bind(last, "lastName");
 		binder.bind(email, "email");
 		binder.bind(role, "role");
-
-		binder.forField(password)
-				.withValidator(pass -> pass.matches("^(|(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,})$"),
-				"need 6 or more chars, mixing digits, lowercase and uppercase letters")
-				.bind(user -> password.getEmptyValue(), (user, pass) -> {
-					if (!password.getEmptyValue().equals(pass)) {
-						user.setPasswordHash(passwordEncoder.encode(pass));
-					}
-				});
 
 		return new BinderCrudEditor<User>(binder, form);
 	}

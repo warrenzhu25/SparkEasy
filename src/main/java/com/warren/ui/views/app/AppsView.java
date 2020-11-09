@@ -16,13 +16,11 @@ import com.warren.ui.MainView;
 import com.warren.ui.crud.AbstractBakeryCrudView;
 import com.warren.ui.utils.BakeryConst;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 
 import static com.warren.ui.utils.BakeryConst.PAGE_APPS;
 
-@Route(value = PAGE_APPS, layout = MainView.class)
+@Route(value = "", layout = MainView.class)
 @PageTitle(BakeryConst.TITLE_APPS)
-@Secured(Role.ADMIN)
 public class AppsView extends AbstractBakeryCrudView<SparkApp> {
 
     @Autowired

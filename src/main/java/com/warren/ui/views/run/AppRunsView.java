@@ -21,14 +21,11 @@ import com.warren.ui.crud.AbstractBakeryCrudView;
 import com.warren.ui.crud.CrudEntityDataProvider;
 import com.warren.ui.utils.BakeryConst;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
-
 
 import static com.warren.ui.utils.BakeryConst.PAGE_RUNS;
 
 @Route(value = PAGE_RUNS, layout = MainView.class)
 @PageTitle(BakeryConst.TITLE_RUNS)
-@Secured(Role.ADMIN)
 public class AppRunsView extends AbstractBakeryCrudView<AppRun> {
 
     @Autowired
