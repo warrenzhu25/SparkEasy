@@ -34,6 +34,8 @@ public class AppsView extends AbstractBakeryCrudView<SparkApp> {
     protected void setupGrid(Grid<SparkApp> grid) {
         grid.addColumn(SparkApp::getName).setHeader("Name");
         grid.addColumn(SparkApp::getLivyBody).setHeader("Livy request body");
+        grid.addColumn(SparkApp::getCreatedDate).setHeader("Created time");
+        grid.addColumn(SparkApp::getLastModifiedDate).setHeader("Updated time");
     }
 
     @Override

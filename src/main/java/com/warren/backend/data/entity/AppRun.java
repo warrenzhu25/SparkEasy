@@ -29,16 +29,6 @@ public class AppRun extends AbstractEntity {
 
 	private String state;
 
-	@CreatedDate
-	@Column(updatable = false)
-	private Date createdDate;
-
-	@LastModifiedDate
-	private Date lastModifiedDate;
-
-	@CreatedBy
-	private User createdBy;
-
 	public String getHistoryUrl() {
 		return cluster.getHistoryUrl() + appId;
 	}

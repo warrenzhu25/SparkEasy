@@ -1,14 +1,20 @@
 package com.warren.backend.data.entity;
 
+import lombok.Data;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
+import javax.persistence.*;
 
+@Data
 @MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 public abstract class AbstractEntity implements Serializable {
 
 	@Id
@@ -18,29 +24,10 @@ public abstract class AbstractEntity implements Serializable {
 	@Version
 	private int version;
 
-	public Long getId() {
-		return id;
-	}
+	@LastModifiedDate
+	private Date lastModifiedDate;
 
-	public int getVersion() {
-		return version;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id, version);
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-		AbstractEntity that = (AbstractEntity) o;
-		return version == that.version &&
-				Objects.equals(id, that.id);
-	}
+	@CreatedDate
+	@Column(updatable = false)
+	private Date createdDate;
 }
